@@ -2,6 +2,9 @@ import configparser
 
 def createConfig(path):
     config = configparser.ConfigParser()
+    #db-schema
+    config.add_section("db-schema")
+    config.set("db-schema", "schema", "create_db.sql")
     #sqlite
     config.add_section("sqlite")
     config.set("sqlite", "file", "wasdasgehtnicht.db")
