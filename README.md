@@ -65,7 +65,17 @@ Just execute wasdasgehtnicht.py
 $ python wasdasgehtnicht.py
 ```
 ### Automation
-Cron is your friend!
+```
+$ crontab -e
+```
+#### Example
+
+```
+*/2 * * * * cd /home/osmc/wasdasgehtnicht && /home/osmc/wasdasgehtnicht/env/bin/python /home/osmc/wasdasgehtnicht/wasdasgehtnicht.py
+```
+* Executes the script every two minutes.
+* As the script needs to have the settings.ini in the same path, cron needs to cd into the working directory first.
+* As I run the script in a python-venv, cron needs to know the desired python interpreter.  
 
 ## OK, now what does it do?
 1. Check internet connection by trying to establish
