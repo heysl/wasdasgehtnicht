@@ -1,6 +1,7 @@
 # wasdasgehtnicht
 
 Sometimes my ISP sucks bad.
+Let's track this splendid performance!
 
 ## Getting Started
 
@@ -14,7 +15,7 @@ Sometimes my ISP sucks bad.
 
 #### Clone this repo
 ```
-$ git clone http://foo && cd wasdasgehtnicht
+$ git clone https://github.com/heysl/wasdasgehtnicht/ && cd wasdasgehtnicht
 ```
 
 #### Install PyMySQL
