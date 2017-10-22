@@ -1,88 +1,80 @@
-# Project Title
+# wasdasgehtnicht
 
-One Paragraph of project description goes here
+Sometimes my ISP sucks bad.
 
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
-
 ### Prerequisites
 
-What things you need to install the software and how to install them
-
-```
-Give examples
-```
+* Python3 (tested on 3.4, 3.5 and 3.6)
+* MySQL with an existing DB and user with write-access
+* PyMySQL-Python module
 
 ### Installing
 
-A step by step series of examples that tell you have to get a development env running
-
-Say what the step will be
-
+#### Clone this repo
 ```
-Give the example
+$ git clone http://foo && cd wasdasgehtnicht
 ```
 
-And repeat
-
+#### Install PyMySQL
 ```
-until finished
-```
-
-End with an example of getting some data out of the system or using it for a little demo
-
-## Running the tests
-
-Explain how to run the automated tests for this system
-
-### Break down into end to end tests
-
-Explain what these tests test and why
-
-```
-Give an example
+$ pip install pymysql
 ```
 
-### And coding style tests
-
-Explain what these tests test and why
-
+#### Create settings.ini
+The settings.ini can be created by a short little script.
 ```
-Give an example
+$ python createConfig.py
+```
+Edit the values according to your needs. You usually only need to change the [mysql]-section.
+```
+[db-schema]
+schema = schema.sql
+
+[sqlite]
+file = wasdasgehtnicht.db
+
+[mysql]
+host = your_mysql_server
+user = my_user
+password = my_password
+db = my_db
+
+[online_check]
+timeout = 3
+host_ip4 = 8.8.8.8
+port_ip4 = 53
+host_ip6 = 2001:4860:4860::8888
+port_ip6 = 53
+host_dns = www.google.com
+```
+#### Create DB-Schema
+Actually there is only one table to create... Once again, there is a script for this tedious work.
+It will create the sqlite-file and the table for your mySQL-DB.
+```
+$ python createSchema.py
 ```
 
-## Deployment
+Ready to go!
 
-Add additional notes about how to deploy this on a live system
+## Usage
+### Manually
+Just execute wasdasgehtnicht.py
+```
+$ python wasdasgehtnicht.py
+```
+### Automation
+Cron is your friend!
 
-## Built With
+## OK, now what does it do?
+1. Check internet connection by trying to establish
+    - an IPv4-socket
+    - an IPv6-socket
+    - a socket by hostname (=check DNS)
 
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
-
-## Contributing
-
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
-
-## Versioning
-
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
-
-## Authors
-
-* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
-
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
-
-## Acknowledgments
-
-* Hat tip to anyone who's code was used
-* Inspiration
-* etc
+2. Write the results to a Database.  
+    I use MySQL-Server on a NAS-System for this purpose. However, this system is not online 24/7.
+    - For the NAS' offline-times, the results are cached in a local sqlite-db-file.
+    - Once the NAS is online again, the cached results are written to the mysql-DB and the local cache is cleared.
 
