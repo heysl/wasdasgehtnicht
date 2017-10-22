@@ -37,10 +37,10 @@ def check_dns(hostname):
         #print(ex)
         return (False, str(ex))
 
-def mysql_write(host, user, password, db, timeout=3, data):
+def mysql_write(host, user, password, db, timeout, data):
     statement = "INSERT INTO wasdasgehtnicht VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
     try:
-        con = pymysql.connect(host=host, user=user, password=password, db=db, timeout=timeout)
+        con = pymysql.connect(host=host, user=user, password=password, db=db, connect_timeout=timeout)        
         with con:
             c = con.cursor()
             c.executemany(statement, data)
@@ -79,11 +79,11 @@ if __name__ == "__main__":
     config = configparser.ConfigParser()
     config.read(path)
 
-    timeout = config.get("online_check", "timeout")
+    timeout = config.getint("online_check", "timeout")
     host_ip4 = config.get("online_check", "host_ip4")
-    port_ip4 = config.get("online_check", "port_ip4")
+    port_ip4 = config.getint("online_check", "port_ip4")
     host_ip6 = config.get("online_check", "host_ip6")
-    port_ip6 = config.get("online_check", "port_ip6")
+    port_ip6 = config.getint("online_check", "port_ip6")
     host_dns = config.get("online_check", "host_dns")
 
     sqlite_db = config.get("sqlite", "file")
@@ -99,16 +99,16 @@ if __name__ == "__main__":
     ip6 = check_ip6(host_ip6, port_ip6, timeout)
     dns = check_dns(host_dns)
 
-    insert = (
+    insert = [(
         timestamps[0],  #dt_unix real
         timestamps[1],  #dt text
         int(ip4[0]),    #status_ip4 int(1)
         ip4[1],         #error_ip4 text
         int(ip6[0]),    #status_ip6 int(1)
         ip6[1],         #error_ip6 text
-        dns[0],         #status_dns int(1)
+        int(dns[0]),    #status_dns int(1)
         dns[1]          #error_dns
-    )
+    )]
 
     #write action!
     if mysql_write(my_host, my_user, my_passwd, my_db, timeout, insert):

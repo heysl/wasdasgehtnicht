@@ -2,14 +2,14 @@ import sqlite3
 import pymysql
 import configparser
 
-def sqlite_create_db(db, schema):
+def sqlite_create(db, schema):
     con = sqlite3.connect(db)
     with con:
         c = con.cursor()
         with open(schema, 'r') as f:
             c.executescript(f.read())
 
-def mysql_create_db(host, user, password, db, schema):
+def mysql_create(host, user, password, db, schema):
     con = pymysql.connect(host = host, user = user, password = password, db = db)
     with con:
         c = con.cursor()
@@ -31,6 +31,6 @@ if __name__ == "__main__":
     mysql_password = config.get("mysql", "password")
     mysql_db = config.get("mysql", "db")
 
-    sqlite_create_db(sqlite_db, db_schema)
-    mysql_create_db(mysql_host, mysql_user, mysql_password, mysql_db, db_schema)
+    sqlite_create(sqlite_db, db_schema)
+    mysql_create(mysql_host, mysql_user, mysql_password, mysql_db, db_schema)
 
